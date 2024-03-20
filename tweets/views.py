@@ -1,7 +1,7 @@
-from django.http import HttpResponseRedirect
-from django.views.generic import TemplateView
+from django.views.generic import ListView
+from .models import Tweet
 
-
-
-class IndexView(TemplateView):
-    template_name = "tweets/index.html"
+class IndexView(ListView):
+    model = Tweet
+    template_name = 'tweets/index.html'
+    context_object_name = 'tweets'

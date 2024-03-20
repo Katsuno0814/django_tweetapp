@@ -118,3 +118,75 @@ import os
 
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'),]
 ```
+
+
+
+新規投稿
+
+Djangoでのフォームのカスタマイズ
+ModelFormを使うことで、モデルに基づいたフォームをカスタマイズして作成することができます。このフォームクラスは、モデルから直接フォームフィールドを生成し、さらにその表示や振る舞いを調整するために使われます。
+
+以下はTweetモデルに対するカスタムフォームを作成する例です。forms.pyファイルをプロジェクトに追加（または編集）して、下記のように記載します。
+
+
+コピーする
+from django import forms
+from .models import Tweet
+
+class TweetForm(forms.ModelForm):
+    class Meta:
+        model = Tweet
+        fields = ['name', 'image', 'text']
+        widgets = {
+            'name': forms.TextInput(attrs={'placeholder': 'Nickname'}),
+            'text': forms.Textarea(attrs={'placeholder': 'Text', 'rows': 4}),
+        }
+        labels = {
+            'name': 'ニックネーム',
+            'image': '画像URL',
+            'text': 'テキスト',
+        }
+このフォームクラスでは、Metaサブクラスを通してどのモデルが対象であるか、そしてどのフィールドがフォームに含まれるべきかをDjangoに伝えます。さらに、widgets属性を用いて特定のフィールド（この場合はnameとtext）のHTML表示をカスタマイズしています。
+
+
+DjangoでRESTfulにする
+Djangoでは、CreateViewは新しいオブジェクトを作成するためのフォームを表示（getリクエスト）し、提供されたデータを使用してオブジェクトを保存（postリクエスト）します。つまり、CreateViewはRailsのnewアクション（フォームを表示）とcreateアクション（データを保存）の両方の機能を内包しています。
+
+しかし、よりRESTfulな設計を望む場合、たとえば、フォーム表示とデータの保存を明確に分けたい場合は、フレームワークに依存せずにビュー関数やクラスベースビューを使ってこれらのアクションを別々に定義することができます。
+
+
+コピーする
+from django.views.generic.edit import FormView
+from .forms import TweetForm
+
+class TweetNewView(FormView):
+    template_name = 'tweet_new.html'
+    form_class = TweetForm
+    success_url = '/tweet/success/'
+
+    def form_valid(self, form):
+        # ここでフォームのデータを保存するロジックを書く
+        return super().form_valid(form)
+
+
+
+CreateView はDjangoにおいて汎用的なクラスベースビューの一つであり、それを直接使うのではなく、あなた自身のモデルに対応したビューを定義して使用するべきです。例えば、Tweetモデルがあるとして、そのモデル用のクリエイトビューを定義する場合は、次のように書きます：
+
+
+コピーする
+from django.views.generic.edit import CreateView
+from .models import Tweet
+
+class TweetCreateView(CreateView):
+    model = Tweet
+    fields = ['name', 'image', 'text']  # あなたがフォームで使用したいフィールド
+    template_name = 'tweet_form.html'   # フォームのテンプレート
+    success_url = reverse_lazy('home')  # 投稿後にリダイレクトするURL
+
+reverse_lazy関数に正しいURLパターンの名前を引数として渡す必要があります。たとえば、フォームの送信後にユーザーをホームページにリダイレクトしたい場合は、次のように書きます。（ここではホームページのURLの名前がhomeだと仮定しています）
+
+
+コピーする
+class CreateView(FormView):
+    # ...
+    success_url = reverse_lazy('home')

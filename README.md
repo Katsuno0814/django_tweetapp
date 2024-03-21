@@ -202,3 +202,18 @@ end
 このバリデーションの設定により、空のツイートは登録できなくなりました
 
 これをできるか確認。
+
+
+汎用ビューを使用して楽に実装できるようにする。
+django.views.generic.list.ListView
+一覧表示を表示させるためのView
+django.views.generic.detail.DetailView
+詳細を表示するためのView
+django.views.generic.edit.FormView
+フォームを利用するためのView
+django.views.generic.edit.CreateView
+モデルオブジェクトを登録するためのView
+django.views.generic.edit.UpdateView
+モデルオブジェクトを更新するためのView
+django.views.generic.edit.DeleteView
+モデルオブジェクトを削除するためのView

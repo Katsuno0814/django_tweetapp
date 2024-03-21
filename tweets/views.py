@@ -1,7 +1,7 @@
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView
-from django.views.generic.edit import FormView, DeleteView
+from django.views.generic.edit import FormView, DeleteView, UpdateView
 from .forms import TweetForm
 from .models import Tweet
 
@@ -34,5 +34,10 @@ class DeleteView(DeleteView):
   success_url = reverse_lazy('tweets:index')  # 削除成功後のリダイレクト先URL
 
 
+class UpdateView(UpdateView):
+    model = Tweet
+    form_class = TweetForm
+    template_name = 'tweets/edit.html'  # テンプレート名を指定
+    success_url = reverse_lazy('tweets:index')  # 更新後のリダイレクト先URL
 
 # class ShowView(FormView):

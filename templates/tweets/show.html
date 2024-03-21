@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<div class="contents row">
+  <div class="content_post" style="background-image: url({{ tweet.image }});">
+    <div class="more">
+      <span><img src="{% static 'images/arrow_top.png' %}" alt="Arrow top"></span>
+      <ul class="more_list">
+        <li>
+          <a href="{% url 'tweets:edit' tweet.pk %}">編集</a>
+        </li>
+        <li>
+          <a href="{% url 'tweets:delete' tweet.pk %}">削除</a>
+        </li>
+      </ul>
+    </div>
+    <p>{{ tweet.text }}</p>
+    <span class="name">{{ tweet.name }}
+    </span>
+  </div>
+</div>
+{% endblock content %}

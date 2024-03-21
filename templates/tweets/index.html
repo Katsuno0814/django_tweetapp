@@ -11,6 +11,9 @@
             <li>
                 <a href="#">詳細</a>
             </li>
+            <li>
+              <a href= {% url "tweets:delete" tweet.pk%}>削除 </a>
+            </li>
         </ul>
       </div>
       <p>{{ tweet.text }}</p>

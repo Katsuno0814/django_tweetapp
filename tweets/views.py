@@ -1,7 +1,7 @@
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView
-from django.views.generic.edit import FormView
+from django.views.generic.edit import FormView, DeleteView
 from .forms import TweetForm
 from .models import Tweet
 
@@ -27,3 +27,12 @@ class CreateView(FormView):
 
         # 親クラスのform_validを呼び出してリダイレクト処理を行う
         return super().form_valid(form)
+
+class DeleteView(DeleteView):
+  model = Tweet
+  template_name = 'tweets/tweet_confirm_delete.html'  # 削除確認ページのテンプレート
+  success_url = reverse_lazy('tweets:index')  # 削除成功後のリダイレクト先URL
+
+
+
+# class ShowView(FormView):

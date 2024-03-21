@@ -190,3 +190,15 @@ reverse_lazy関数に正しいURLパターンの名前を引数として渡す�
 class CreateView(FormView):
     # ...
     success_url = reverse_lazy('home')
+
+
+
+ tweet.rbを編集しバリデーションを設けましょう
+app/models/tweet.rb
+
+class Tweet < ApplicationRecord
+  validates :text, presence: true
+end
+このバリデーションの設定により、空のツイートは登録できなくなりました
+
+これをできるか確認。

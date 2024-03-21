@@ -11,5 +11,13 @@ class Tweet(models.Model):
 
     def __str__(self):
         return self.text
+
+    # def clean(self):
+    #     forbidden_words = ['不適切な単語', '禁止された単語']
+    #     for word in forbidden_words:
+    #         if word in self.text:
+    #             raise ValidationError({
+    #                 'text': _("このテキストには禁止されている単語が含まれています。")
+    #             })
     class Meta:
         db_table = 'tweets'

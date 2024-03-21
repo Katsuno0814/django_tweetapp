@@ -1,0 +1,8 @@
+<!-- tweets/tweet_confirm_delete.html -->
+<p>本当にこのツイートを削除してもよろしいですか？</p>
+
+<form method="post">{% csrf_token %}
+  <input type="submit" value="削除確定">
+</form>
+
+<a href="{% url 'tweets:index' %}">キャンセル</a>

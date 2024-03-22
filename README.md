@@ -1,3 +1,4 @@
+https://docs.djangoproject.com/ja/5.0/intro/tutorial01/
 
 Django のプロジェクト (project) を構成するコードを自動生成します。プロジェクトとは、データベースの設定や Django 固有のオプション、アプリケーション固有の設定などといった、個々の Django インスタンスの設定を集めたものです。
 
@@ -281,3 +282,66 @@ urlpatterns = [
 ]
 
 ```
+
+Tweetテーブルにnameカラムを削除し、外部機user_idを追加
+その後マイグレートでエラー↓
+```
+ pictweet % python manage.py makemigrations
+It is impossible to add a non-nullable field 'user' to tweet without specifying a default. This is because the database needs something to populate existing rows.
+Please select a fix:
+ 1) Provide a one-off default now (will be set on all existing rows with a null value for this column)
+ 2) Quit and manually define a default value in models.py.
+Select an option:
+
+```
+Djangoがこれを質問しているのは、Tweetモデルにuserという新しい非nullフィールドを追加しようとしている時に、既存のデータベースのTweetテーブルにはすでに行が存在するためです。新しいフィールドが非nullであるため、すでにデータベースにある各行に対してこの新しいフィールドにどの値を設定するべきかDjangoは判断できません。このため、Djangoはどう進めるかユーザーに問い合わせています。
+
+選択肢は以下の二つです：
+
+一時的なデフォルト値の提供: このオプションを選ぶと、追加されたuserフィールドに対して、すべての既存行に適用される一時的なデフォルト値を入力するように求められます。マイグレーション後、必要に応じてデータベース中のこれらの値を更新できます。例えば、デフォルト値として既存のユーザーのIDを使うことができます。
+
+モデルにデフォルト値を手動で定義する: このオプションを選ぶと、作業を中断して、models.pyファイル内でTweetモデルのuserフィールドにデフォルト値を手動で設定することになります。例えば、user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)のように設定することができます。ただし、全てのTweetインスタンスにこのデフォルト値が設定されることに注意してください。適切なデフォルト値を選ぶのは時に難しいため、この選択肢は新しいフィールドをnull許容にするか、あらかじめすべてのインスタンスに適用可能な適切なデフォルト値を考えるために役立ちます。
+
+これらの選択肢を理解した上で、最適な選択を行ってください。null値を許容する場合や、既存のデータに基づいて特定のデフォルト値を適用する必要がある場合には、特に慎重な判断が求められます。
+
+
+
+
+
+
+Tweetフォームの中身も変更しておく
+```
+class TweetForm(forms.ModelForm):
+    class Meta:
+        model = Tweet
+        fields = ['image', 'text']
+        widgets = {
+            'text': forms.Textarea(attrs={'placeholder': 'Text', 'rows': 4}),
+        }
+        labels = {
+            'image': '画像URL',
+            'text': 'テキスト',
+        }
+```
+
+モデル。
+user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
+こちらはuser_idでも良いのでしょうか？
+Djangoのモデルフィールドとしてuser = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)を定義するとき、これはDjangoに対してsettings.AUTH_USER_MODEL（通常はプロジェクトのユーザーモデル）を参照する外部キーを作成するように指示します。このフィールドがデータベースにマイグレートされるとき、Djangoは自動的にuser_idという名前のカラムをデータベース内の対応テーブルに追加します。
+
+userとuser_idの間には重要な違いがあります：
+
+userはDjango モデルのフィールド名であり、Pythonコード内で外部キーリレーションシップを表します。これを通じて、関連するユーザーオブジェクト（settings.AUTH_USER_MODELで指定されたモデルのインスタンス）にアクセスできます。
+user_idはデータベース内の実際のカラム名で、外部キー関連の実際のID値が保存されます。これは通常、DjangoのORM（Object-Relational Mapping）によって内部的に使用され、直接的には操作せずDjangoに管理させます。
+従って、モデル定義においてuser = models.ForeignKey(...)と記述するのは正しいです。このフィールドを介して、Pythonのコード内でuser属性をuser_idの値を使って自動的に参照することができます。例えば、Tweetモデルのインスタンスがある場合、my_tweet.userで関連するユーザーオブジェクトにアクセスでき、my_tweet.user_idでそのユーザーのID（データベース内の実際の値）を直接取得できます。
+
+したがって、モデル定義ではuserのようにフィールド名を記述し、Djangoが内部的にuser_idというカラムを作成するのに任せるのが良い方法です。
+
+
+エラーメッセージ
+NoReverseMatchエラー
+対処
+エラーメッセージからは、トップページ（"GET / HTTP/1.1" 500 157170）のリクエスト処理中にUrlの逆引き（reverse lookup）でNoReverseMatchエラーが発生したことがわかります。これは、mypageビューに対するURLを生成しようとしたものの、pk引数を指定せず（または正しく指定できず）に{% url %}テンプレートタグを使っていたためと考えられます。
+
+従って、テンプレートでmypageビューへのリンクを生成する際には、アプリ名を含めて正しく引数を指定する必要があります。もしuserオブジェクトがテンプレートに渡されている場合、以下のように記述します：

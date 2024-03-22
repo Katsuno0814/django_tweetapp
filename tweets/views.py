@@ -19,12 +19,12 @@ class CreateView(FormView):
 
     def form_valid(self, form):
         # form.cleaned_dataを使用して安全にフォームデータを取得
-        name = form.cleaned_data['name']
         image = form.cleaned_data['image']
         text = form.cleaned_data['text']
 
         # Tweetモデルインスタンスを作成して保存
-        Tweet.objects.create(name=name, image=image, text=text)
+        # form_valid メソッド内で self.request.user を取得し、Tweet の user フィールドにセット
+        tweet = Tweet.objects.create(image=image, text=text, user=self.request.user)
 
         # 親クラスのform_validを呼び出してリダイレクト処理を行う
         return super().form_valid(form)

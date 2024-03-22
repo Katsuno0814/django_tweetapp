@@ -23,6 +23,10 @@
       <span class="name">
         {{ tweet.name }}
       </span>
+      <p>{{ tweet.text }}</p>
+      <span class="name"><a href="{% url 'users:mypage' tweet.user.pk %}">
+      <span>投稿者</span>{{ tweet.user.nickname }}</a>
+      </span>
     </div>
   {% endfor %}
 </div>

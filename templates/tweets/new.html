@@ -5,8 +5,6 @@
     <h3>投稿する</h3>
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        <!-- Name入力フィールド -->
-        <input type="text" name="name" placeholder="Nickname">
         <!-- Image(画像URLまたはファイルアップロードなどの選択)入力フィールド -->
         <input type="text" name="image" placeholder="Image Url">
         <!-- Text入力フィールド -->

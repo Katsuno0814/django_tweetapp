@@ -1,35 +1,35 @@
-{% comment %} {% load static %}
+ {% load static %}
 
 
 {% for tweet in tweets %}
-    <div class="content_post" style="{% if tweet.image %}background-image: url('{{ tweet.image.url }}');{% endif %}">
+    <div class="content_post" style="background-image: url({{ tweet.image }});">
 
         <div class="more">
             <span><img src="{% static 'images/arrow_top.png' %}"></span>
             <ul class="more_list">
-                {% if tweet.author == user %}
+                {% if tweet.user == request.user %}
                 <li>
-                    <a href="{% url 'tweet_delete' tweet.pk %}">削除</a>
+                    <a href="{% url 'tweets:delete' tweet.pk %}">削除</a>
                 </li>
                 <li>
-                    <a href="{% url 'tweet_edit' tweet.pk %}">編集</a>
+                    <a href="{% url 'tweets:edit' tweet.pk %}">編集</a>
                 </li>
                 <li>
-                    <a href="{% url 'tweet_detail' tweet.pk %}">詳細</a>
+                    <a href="{% url 'tweets:show' tweet.pk %}">詳細</a>
                 </li>
                 {% else %}
                 <li>
-                    <a href="{% url 'tweet_detail' tweet.pk %}">詳細</a>
+                    <a href="{% url 'tweets:show' tweet.pk %}">詳細</a>
                 </li>
                 {% endif %}
             </ul>
         </div>
 
         <p>{{ tweet.text }}</p>
-        <span class="name"><a href="{% url 'profile_user' tweet.author.pk %}">
-        <span>投稿者</span>{{ tweet.author.username }}</a>
+        <span class="name"><a href="{% url 'users:mypage' tweet.user.pk %}">
+        <span>投稿者</span>{{ tweet.user.nickname }}</a>
         </span>
     </div>
 {% empty %}
     <p>ツイートが見つかりません。</p>
-{% endfor %} {% endcomment %}
+{% endfor %}

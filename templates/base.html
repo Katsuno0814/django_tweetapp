@@ -15,7 +15,7 @@
         <span>{{ user.nickname }}
             <ul class="user__info">
                 <li>
-                  <a href="">マイページ</a>
+                  <a href="{% url 'users:mypage'  pk=user.pk%}">マイページ</a>
                   <a href="{% url 'logout' %}">ログアウト</a>
                 </li>
             </ul>

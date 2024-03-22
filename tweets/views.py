@@ -10,6 +10,10 @@ class IndexView(ListView):
     model = Tweet
     template_name = 'tweets/index.html'
     context_object_name = 'tweets'
+    def get_queryset(self):
+        # 'created_at' フィールドを使って降順に並び替える
+        return Tweet.objects.order_by('-created_at')
+
 
 
 class CreateView(FormView):

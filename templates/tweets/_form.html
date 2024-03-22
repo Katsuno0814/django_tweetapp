@@ -1,0 +1,16 @@
+{% load static %}
+
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+    <form method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit">SEND</button>
+    </form>
+  {% comment %} <!-- Image(画像URLまたはファイルアップロードなどの選択)入力フィールド -->
+  <input type="text" name="image" placeholder="Image Url">
+  <!-- Text入力フィールド -->
+  <textarea name="text" placeholder="text" rows="10"></textarea>
+  <!-- 送信ボタン -->
+  <button type="submit">SEND</button> {% endcomment %}
+</form>

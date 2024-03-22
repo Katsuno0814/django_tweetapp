@@ -3,11 +3,7 @@
 <div class="contents row">
   <div class="container">
     <h3>編集する</h3>
-    <form method="post">
-      {% csrf_token %}
-      {{ form.as_p }}
-      <button type="submit">SEND</button>
-    </form>
+    {% include 'tweets/_form.html' %}
   </div>
 </div>
 {% endblock content %}

@@ -345,3 +345,44 @@ NoReverseMatchエラー
 エラーメッセージからは、トップページ（"GET / HTTP/1.1" 500 157170）のリクエスト処理中にUrlの逆引き（reverse lookup）でNoReverseMatchエラーが発生したことがわかります。これは、mypageビューに対するURLを生成しようとしたものの、pk引数を指定せず（または正しく指定できず）に{% url %}テンプレートタグを使っていたためと考えられます。
 
 従って、テンプレートでmypageビューへのリンクを生成する際には、アプリ名を含めて正しく引数を指定する必要があります。もしuserオブジェクトがテンプレートに渡されている場合、以下のように記述します：
+
+
+
+ModuleNotFoundError: No module named 'django_extensions'エラーは、指定されたモジュール（この場合はdjango_extensions）がPythonのパス上に見つからない場合に発生します。これは、django-extensionsが正しくインストールされていないか、またはインストールされた環境がアクティブでない場合に起こり得ます。
+
+次のステップで問題の解決を試みてください：
+
+1. 仮想環境の確認
+django-extensionsをインストールした仮想環境が現在アクティブであることを確認してください。仮想環境をアクティブにするには、仮想環境が設定されているディレクトリで以下のコマンドを実行します。仮想環境の名前がmyprojectenvだと仮定すると、次のようになります：
+
+
+コピーする
+source /Users/tech-camp/.pyenv/versions/myprojectenv/bin/activate
+このコマンドを実行後、プロンプトの先頭に仮想環境の名前が表示されるはずです（例：(myprojectenv)）。これは仮想環境がアクティブであることを意味します。
+
+2. django-extensionsの再インストール
+仮想環境がアクティブであることを確認したら、django-extensionsを再インストールしてください。次のコマンドを使用します：
+
+
+コピーする
+pip install django-extensions
+3. インストールの確認
+django-extensionsが正しくインストールされているかを確認するには、インストール済みのパッケージのリストを表示するpip listコマンドを実行します。出力からdjango-extensionsが見つかるはずです。
+
+
+コピーする
+pip list
+4. Djangoの設定のチェック
+次に、settings.pyファイルに'django_extensions'がINSTALLED_APPSに正しく追加されていることを確認してください。正しく追加されている場合は、以下のようになります：
+
+
+コピーする
+INSTALLED_APPS = [
+    # 他のアプリケーション
+    'django_extensions',
+]
+5. サーバーの再起動
+設定に変更を加えた後、Djangoの開発サーバーを再起動してください。これを行うには、予め開発サーバーを実行していたコマンドラインでCtrl + Cを押してサーバーを停止し、再度python manage.py runserverを実行します。
+
+FormMixinのget_formメソッドを使用してformオブジェクトを追加して
+TweetのshowView内にFormを追加しようとすること。

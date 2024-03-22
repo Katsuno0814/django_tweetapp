@@ -2,9 +2,14 @@ from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView
 from django.views.generic.detail import DetailView
+from django.views.generic.edit import FormMixin
 from django.views.generic.edit import FormView, DeleteView, UpdateView
 from .forms import TweetForm
 from .models import Tweet
+from comments.forms import CommentForm
+from comments.models import Comment
+from django.shortcuts import get_object_or_404
+
 
 class IndexView(ListView):
     model = Tweet
@@ -45,6 +50,16 @@ class UpdateView(UpdateView):
     template_name = 'tweets/edit.html'  # テンプレート名を指定
     success_url = reverse_lazy('tweets:index')  # 更新後のリダイレクト先URL
 
-class ShowView(DetailView):
-  model = Tweet
-  template_name = 'tweets/show.html'
+class ShowView(FormMixin, DetailView):
+    model = Tweet
+    template_name = 'tweets/show.html'
+    form_class = CommentForm
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        comments = Comment.objects.filter(tweet=self.object).order_by('-created_at')
+        context['comments'] = comments
+        context['form'] = self.get_form()
+        for comment in comments:
+          print(comment.user.nickname, comment.text)
+        return context

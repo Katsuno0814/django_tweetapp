@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 
 from . import views
 
@@ -9,4 +9,5 @@ urlpatterns = [
     path("tweets/<int:pk>/delete/", views.DeleteView.as_view(), name="delete"),
     path('tweets/<int:pk>/edit/', views.UpdateView.as_view(), name='edit'),
     path('tweets/<int:pk>/', views.ShowView.as_view(), name='show'),
+    path('tweets/<int:pk>/comments/', include('comments.urls')),  # これを追加
 ]

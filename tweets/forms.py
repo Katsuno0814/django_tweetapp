@@ -12,3 +12,12 @@ class TweetForm(forms.ModelForm):
             'image': '画像URL',
             'text': 'テキスト',
         }
+
+class SearchForm(forms.Form):
+    keyword = forms.CharField(
+        required=False,
+        widget=forms.TextInput(attrs={
+            'placeholder': '投稿を検索する',
+            'class': 'search-input'
+        })
+    )

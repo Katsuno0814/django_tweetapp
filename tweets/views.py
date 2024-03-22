@@ -1,23 +1,26 @@
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views.generic import ListView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import FormMixin
 from django.views.generic.edit import FormView, DeleteView, UpdateView
-from .forms import TweetForm
+from .forms import TweetForm, SearchForm
 from .models import Tweet
 from comments.forms import CommentForm
 from comments.models import Comment
 from django.shortcuts import get_object_or_404
 
 
-class IndexView(ListView):
+class IndexView(ListView, FormMixin):
     model = Tweet
     template_name = 'tweets/index.html'
     context_object_name = 'tweets'
+    form_class = SearchForm
+
     def get_queryset(self):
         # 'created_at' フィールドを使って降順に並び替える
         return Tweet.objects.order_by('-created_at')
+
 
 
 
@@ -60,6 +63,14 @@ class ShowView(FormMixin, DetailView):
         comments = Comment.objects.filter(tweet=self.object).order_by('-created_at')
         context['comments'] = comments
         context['form'] = self.get_form()
-        for comment in comments:
-          print(comment.user.nickname, comment.text)
         return context
+
+def tweet_search(request):
+    form = SearchForm(request.GET or None)
+    if form.is_valid():
+        keyword = form.cleaned_data.get('keyword', '')
+        tweets = Tweet.objects.filter(text__icontains=keyword)
+    else:
+        tweets = Tweet.objects.all()
+
+    return render(request, 'tweets/search.html', {'form': form, 'tweets': tweets})

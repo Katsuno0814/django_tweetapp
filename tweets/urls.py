@@ -9,5 +9,6 @@ urlpatterns = [
     path("tweets/<int:pk>/delete/", views.DeleteView.as_view(), name="delete"),
     path('tweets/<int:pk>/edit/', views.UpdateView.as_view(), name='edit'),
     path('tweets/<int:pk>/', views.ShowView.as_view(), name='show'),
-    path('tweets/<int:pk>/comments/', include('comments.urls')),  # これを追加
+    path('tweets/<int:pk>/comments/', include('comments.urls')),
+    path('tweets/search_tweets/', views.tweet_search, name='search'),
 ]

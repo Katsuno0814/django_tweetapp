@@ -1,13 +1,10 @@
 {% extends "base.html" %}
 {% load static %}
 {% block content %}
-
 <form action="{% url 'tweets:search' %}" method="get" class="search-form">
   {{ form.keyword }}
   <button type="submit" class="search-btn">検索</button>
 </form>
-
-
 <div class="contents row">
   {% include 'tweets/_tweet_list.html' %}
 </div>

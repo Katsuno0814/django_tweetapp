@@ -1,4 +1,22 @@
 
+Django のプロジェクト (project) を構成するコードを自動生成します。プロジェクトとは、データベースの設定や Django 固有のオプション、アプリケーション固有の設定などといった、個々の Django インスタンスの設定を集めたものです。
+
+```
+django-admin startproject プロジェクトアプリ名
+
+python manage.py runserver
+
+python manage.py startapp アプリ名(機能名)
+
+```
+
+マイグレーションファイル
+```
+python manage.py makemigrations
+python manage.py migrate
+
+```
+
 ```
 pictweet % python manage.py shell
 ```
@@ -217,3 +235,49 @@ django.views.generic.edit.UpdateView
 モデルオブジェクトを更新するためのView
 django.views.generic.edit.DeleteView
 モデルオブジェクトを削除するためのView
+
+
+ユーザーの登録には
+AbstractBaseUser と BaseUserManager の使用してユーザーモデルの作成を行う。
+
+以下をsetting.pyへ
+AUTH_USER_MODEL = 'users.CustomUser'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
+
+ログインの処理はfrom django.contrib.auth.views import LoginViewで楽に実装
+
+
+```
+# urls.py
+from django.urls import path
+from django.contrib.auth.views import LogoutView
+
+urlpatterns = [
+    # 既存のパス
+    path('logout/', LogoutView.as_view(next_page='/'), name='logout'),
+    # 他のURLconfパス...
+]
+
+```
+
+
+エラー
+users/urls.pyにはログアウトのurlpathは書かない、ルートディレクトリで行うようにしているため
+```
+サーバーは'logout'という名前のURLパターンを見つけることができずに500の内部サーバーエラーを返しています。エラーはdjango.urls.exceptions.NoReverseMatchとして示されており、これは{% url 'logout' %}タグまたはreverse('logout')関数をテンプレートまたはビューで使っているものの、Djangoがこの名前のURLパターンを識別できないことを意味します。
+
+この問題を解決するには、logoutという名前のURLルートをurls.pyに正しく定義する必要があります。これは通常、ログアウト機能を提供するためにdjango.contrib.auth.views.LogoutViewを使って行われます。あなたのプロジェクトまたはアプリケーションのurls.pyファイルをチェックして、logoutURLパターンが正しく設定されていることを確認してください。
+
+urls.pyの例
+以下は、ログアウト機能をurls.pyに追加する簡単な例です：
+
+from django.urls import path
+from django.contrib.auth.views import LogoutView
+
+urlpatterns = [
+    # 他のURLパターン
+    path('logout/', LogoutView.as_view(), name='logout'),
+]
+
+```

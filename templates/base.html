@@ -10,26 +10,24 @@
     <header class="header">
       <div class="header__bar row">
         <h1 class="grid-6"><a href="/">PicTweet</a></h1>
-          {% comment %} {% if user.is_authenticated %}
-          <div class="user_nav grid-6">
-          <span>{{ user.username }}
-              <ul class="user__info">
-                  <li>
-                    <a href="{% url 'profile_user' user.pk %}">マイページ</a>
-                    <a href="/logout">ログアウト</a>
-                  </li>
-              </ul>
-          </span> {% endcomment %}
-          <div class="user_nav grid-6">
-            <a class="post" href={% url "tweets:new"%}>投稿する</a>
-          </div>
-          {% comment %} </div>
-          {% else %}
-          <div class="grid-6">
-            <a class="post" href="/login">ログイン</a>
-            <a class="post" href="/signup">新規登録</a>
-          </div>
-          {% endif %} {% endcomment %}
+        {% if user.is_authenticated %}
+        <div class="user_nav grid-6">
+        <span>{{ user.nickname }}
+            <ul class="user__info">
+                <li>
+                  <a href="">マイページ</a>
+                  <a href="{% url 'logout' %}">ログアウト</a>
+                </li>
+            </ul>
+        </span>
+        <a class="post" href={% url "tweets:new" %}>投稿する</a>
+        </div>
+        {% else %}
+        <div class="grid-6">
+          <a class="post" href={% url "users:sign_in" %}>ログイン</a>
+          <a class="post" href={% url "users:sign_up" %}>新規登録</a>
+        </div>
+        {% endif %}
       </div>
     </header>
 

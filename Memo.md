@@ -159,7 +159,7 @@ ModelFormを使うことで、モデルに基づいたフォームをカスタ�
 以下はTweetモデルに対するカスタムフォームを作成する例です。forms.pyファイルをプロジェクトに追加（または編集）して、下記のように記載します。
 
 
-コピーする
+
 from django import forms
 from .models import Tweet
 
@@ -185,7 +185,7 @@ Djangoでは、CreateViewは新しいオブジェクトを作成するための�
 しかし、よりRESTfulな設計を望む場合、たとえば、フォーム表示とデータの保存を明確に分けたい場合は、フレームワークに依存せずにビュー関数やクラスベースビューを使ってこれらのアクションを別々に定義することができます。
 
 
-コピーする
+
 from django.views.generic.edit import FormView
 from .forms import TweetForm
 
@@ -203,7 +203,7 @@ class TweetNewView(FormView):
 CreateView はDjangoにおいて汎用的なクラスベースビューの一つであり、それを直接使うのではなく、あなた自身のモデルに対応したビューを定義して使用するべきです。例えば、Tweetモデルがあるとして、そのモデル用のクリエイトビューを定義する場合は、次のように書きます：
 
 
-コピーする
+
 from django.views.generic.edit import CreateView
 from .models import Tweet
 
@@ -216,7 +216,7 @@ class TweetCreateView(CreateView):
 reverse_lazy関数に正しいURLパターンの名前を引数として渡す必要があります。たとえば、フォームの送信後にユーザーをホームページにリダイレクトしたい場合は、次のように書きます。（ここではホームページのURLの名前がhomeだと仮定しています）
 
 
-コピーする
+
 class CreateView(FormView):
     # ...
     success_url = reverse_lazy('home')
@@ -295,7 +295,7 @@ urlpatterns = [
 ```
 
 Tweetテーブルにnameカラムを削除し、外部機user_idを追加
-その後マイグレートでエラー↓
+その後マイグレートで案内↓
 ```
  pictweet % python manage.py makemigrations
 It is impossible to add a non-nullable field 'user' to tweet without specifying a default. This is because the database needs something to populate existing rows.
@@ -367,7 +367,7 @@ ModuleNotFoundError: No module named 'django_extensions'エラーは、指定さ
 django-extensionsをインストールした仮想環境が現在アクティブであることを確認してください。仮想環境をアクティブにするには、仮想環境が設定されているディレクトリで以下のコマンドを実行します。仮想環境の名前がmyprojectenvだと仮定すると、次のようになります：
 
 
-コピーする
+
 source /Users/tech-camp/.pyenv/versions/myprojectenv/bin/activate
 このコマンドを実行後、プロンプトの先頭に仮想環境の名前が表示されるはずです（例：(myprojectenv)）。これは仮想環境がアクティブであることを意味します。
 
@@ -375,19 +375,19 @@ source /Users/tech-camp/.pyenv/versions/myprojectenv/bin/activate
 仮想環境がアクティブであることを確認したら、django-extensionsを再インストールしてください。次のコマンドを使用します：
 
 
-コピーする
+
 pip install django-extensions
 3. インストールの確認
 django-extensionsが正しくインストールされているかを確認するには、インストール済みのパッケージのリストを表示するpip listコマンドを実行します。出力からdjango-extensionsが見つかるはずです。
 
 
-コピーする
+
 pip list
 4. Djangoの設定のチェック
 次に、settings.pyファイルに'django_extensions'がINSTALLED_APPSに正しく追加されていることを確認してください。正しく追加されている場合は、以下のようになります：
 
 
-コピーする
+
 INSTALLED_APPS = [
     # 他のアプリケーション
     'django_extensions',

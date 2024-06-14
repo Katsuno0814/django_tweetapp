@@ -22,8 +22,6 @@ class IndexView(ListView, FormMixin):
         return Tweet.objects.order_by('-created_at')
 
 
-
-
 class CreateView(FormView):
     template_name = 'tweets/new.html'
     form_class = TweetForm
